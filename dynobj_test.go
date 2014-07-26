@@ -15,7 +15,8 @@ const (
 		"subkey_false": false,
 		"subkey_yes": "yes",
 		"subkey_no": "no"
-	}
+	},
+	"key-null": null
 }`
 )
 
@@ -65,6 +66,10 @@ func TestAsStr(t *testing.T) {
 		if v != "nested" {
 			t.Errorf("Expect nested but got %v", v)
 		}
+		v = obj.AsStr("/key-null")
+		if v != "" {
+			t.Errorf("Expect empty string but got %v", v)
+		}
 	}
 }
 
@@ -80,6 +85,10 @@ func TestAsInt(t *testing.T) {
 		if v != 10 {
 			t.Errorf("Expect 10 but got %v", v)
 		}
+		v = obj.AsIntD("key-null", 100)
+		if v != 100 {
+			t.Errorf("Expect 100 but got %v", v)
+		}
 		v = obj.AsInt("/key-arr/0")
 		if v != 1 {
 			t.Errorf("Expect 1 but got %v", v)
@@ -87,6 +96,10 @@ func TestAsInt(t *testing.T) {
 		v = obj.AsInt("/key-arr/2")
 		if v != 0 {
 			t.Errorf("Expect 0 but got %v", v)
+		}
+		v = obj.AsInt("/key-null")
+		if v != 0 {
+			t.Errorf("Expect empty string but got %v", v)
 		}
 	}
 }
@@ -100,6 +113,10 @@ func TestAsBool(t *testing.T) {
 			t.Errorf("Expect true but got %v", v)
 		}
 		v = obj.AsBoolD("key-map/subkey_yes", false)
+		if !v {
+			t.Errorf("Expect true but got %v", v)
+		}
+		v = obj.AsBoolD("key-null", true)
 		if !v {
 			t.Errorf("Expect true but got %v", v)
 		}
@@ -120,6 +137,10 @@ func TestAsBool(t *testing.T) {
 			t.Errorf("Expect false but got %v", v)
 		}
 		v = obj.AsBool("key-map/subkey_no")
+		if v {
+			t.Errorf("Expect false but got %v", v)
+		}
+		v = obj.AsBool("key-null")
 		if v {
 			t.Errorf("Expect false but got %v", v)
 		}

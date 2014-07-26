@@ -96,6 +96,8 @@ func (o *DynObj) AsAnyD(path string, defVal interface{}) interface{} {
 func (o *DynObj) AsStrD(path string, defVal string) string {
 	if val, err := o.Query.Query(ParsePath(path), defVal); err != nil {
 		return defVal
+	} else if val == nil {
+		return defVal
 	} else {
 		return fmt.Sprintf("%v", val)
 	}
